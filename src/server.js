@@ -11,9 +11,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.set("trust proxy", 1);
+
 const port = Number(process.env.PORT || 3000);
 
 securityMiddleware(app);
+
 app.use(express.json({ limit: "300kb" }));
 app.use(cookieParser());
 app.use(morgan("combined"));
@@ -38,6 +42,7 @@ app.get("*splat", (_req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
+  console.error(err);
   res.status(500).json({ error: "Internal server error." });
 });
 
