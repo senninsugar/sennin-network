@@ -13,7 +13,7 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: process.env.CLIENT_URL || true,
   credentials: true
 }));
 
@@ -27,7 +27,7 @@ app.use(express.urlencoded({
 }));
 
 app.get("/api/health", (req, res) => {
-  res.json({
+  res.status(200).json({
     ok: true,
     name: "Web OS API",
     version: "1.0.0"
@@ -37,24 +37,40 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/apps", appsRouter);
 
-if (process.env.NODE_ENV === "production") {
-  const distPath = path.join(__dirname, "..", "dist");
+const distPath = path.join(__dirname, "..", "dist");
 
-  app.use(express.static(distPath));
+app.use(express.static(distPath));
 
-  app.get("/*splat", (req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
+app.get(/^(?!\/api(?:\/|$)).*/, (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"), (err) => {
+    if (err) {
+      console.error("Failed to send index.html:", err);
+
+      if (!res.headersSent) {
+        res.status(404).send("Frontend build not found");
+      }
+    }
   });
-}
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Not Found"
+  });
+});
 
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error("SERVER ERROR:", err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
 
   res.status(500).json({
     error: "Internal server error"
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Web OS server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Web OS server running on 0.0.0.0:${PORT}`);
 });
