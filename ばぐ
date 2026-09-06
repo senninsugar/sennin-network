@@ -1,90 +1,91 @@
- sennin network@1.0.0 start
+npm warn config production Use `--omit=dev` instead.
+> sennin network@1.0.0 start
 > node server/server.js
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+/app/node_modules/path-to-regexp/dist/index.js:108
+                    throw new PathError(`Missing parameter name at index ${index}`, str);
+                    ^
+PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+    at consumeUntil (/app/node_modules/path-to-regexp/dist/index.js:108:27)
+    at parse (/app/node_modules/path-to-regexp/dist/index.js:140:26)
+    at process (/app/node_modules/path-to-regexp/dist/index.js:263:56)
+    at pathToRegexp (/app/node_modules/path-to-regexp/dist/index.js:274:5)
+    at Object.match (/app/node_modules/path-to-regexp/dist/index.js:225:30)
+    at matcher (/app/node_modules/router/lib/layer.js:86:23)
+    at new Layer (/app/node_modules/router/lib/layer.js:93:62)
+    at router.route (/app/node_modules/router/index.js:428:17)
+    at app.route (/app/node_modules/express/lib/application.js:257:22)
+    at app.<computed> [as get] (/app/node_modules/express/lib/application.js:478:22) {
+  originalPath: '*'
+}
+Node.js v24.19.0
+npm warn config production Use `--omit=dev` instead.
+> sennin network@1.0.0 start
+> node server/server.js
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+/app/node_modules/path-to-regexp/dist/index.js:108
+                    throw new PathError(`Missing parameter name at index ${index}`, str);
+                    ^
+PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+    at consumeUntil (/app/node_modules/path-to-regexp/dist/index.js:108:27)
+    at parse (/app/node_modules/path-to-regexp/dist/index.js:140:26)
+    at process (/app/node_modules/path-to-regexp/dist/index.js:263:56)
+    at pathToRegexp (/app/node_modules/path-to-regexp/dist/index.js:274:5)
+    at Object.match (/app/node_modules/path-to-regexp/dist/index.js:225:30)
+    at matcher (/app/node_modules/router/lib/layer.js:86:23)
+    at new Layer (/app/node_modules/router/lib/layer.js:93:62)
+    at router.route (/app/node_modules/router/index.js:428:17)
+    at app.route (/app/node_modules/express/lib/application.js:257:22)
+    at app.<computed> [as get] (/app/node_modules/express/lib/application.js:478:22) {
+  originalPath: '*'
+}
+Node.js v24.19.0
+npm warn config production Use `--omit=dev` instead.
+> sennin network@1.0.0 start
+> node server/server.js
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+    at consumeUntil (/app/node_modules/path-to-regexp/dist/index.js:108:27)
+    at parse (/app/node_modules/path-to-regexp/dist/index.js:140:26)
+    at process (/app/node_modules/path-to-regexp/dist/index.js:263:56)
+    at pathToRegexp (/app/node_modules/path-to-regexp/dist/index.js:274:5)
+    at Object.match (/app/node_modules/path-to-regexp/dist/index.js:225:30)
+/app/node_modules/path-to-regexp/dist/index.js:108
+                    throw new PathError(`Missing parameter name at index ${index}`, str);
+                    ^
+PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+    at matcher (/app/node_modules/router/lib/layer.js:86:23)
+    at new Layer (/app/node_modules/router/lib/layer.js:93:62)
+    at router.route (/app/node_modules/router/index.js:428:17)
+    at app.route (/app/node_modules/express/lib/application.js:257:22)
+    at app.<computed> [as get] (/app/node_modules/express/lib/application.js:478:22) {
+  originalPath: '*'
+}
+Node.js v24.19.0
+npm warn config production Use `--omit=dev` instead.
+> node server/server.js
+> sennin network@1.0.0 start
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
 ◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
-◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
-    at Module._compile (node:internal/modules/cjs/loader:1872:14) {
-node:internal/modules/cjs/loader:1520
-  code: 'MODULE_NOT_FOUND',
-  throw err;
-  requireStack: [ '/app/server/server.js' ]
-  ^
+/app/node_modules/path-to-regexp/dist/index.js:108
+                    throw new PathError(`Missing parameter name at index ${index}`, str);
+                    ^
+    at process (/app/node_modules/path-to-regexp/dist/index.js:263:56)
+    at pathToRegexp (/app/node_modules/path-to-regexp/dist/index.js:274:5)
+PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+    at consumeUntil (/app/node_modules/path-to-regexp/dist/index.js:108:27)
+    at parse (/app/node_modules/path-to-regexp/dist/index.js:140:26)
+    at Object.match (/app/node_modules/path-to-regexp/dist/index.js:225:30)
+    at app.<computed> [as get] (/app/node_modules/express/lib/application.js:478:22) {
+    at matcher (/app/node_modules/router/lib/layer.js:86:23)
+  originalPath: '*'
+    at new Layer (/app/node_modules/router/lib/layer.js:93:62)
 }
-Error: Cannot find module './apps'
-Require stack:
+    at router.route (/app/node_modules/router/index.js:428:17)
+    at app.route (/app/node_modules/express/lib/application.js:257:22)
 Node.js v24.19.0
-- /app/server/server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
-    at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
-    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1122:12)
-    at Module._load (node:internal/modules/cjs/loader:1294:5)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-    at Module.require (node:internal/modules/cjs/loader:1617:12)
-    at require (node:internal/modules/helpers:153:16)
-    at Object.<anonymous> (/app/server/server.js:9:20)
-npm warn config production Use `--omit=dev` instead.
-> sennin network@1.0.0 start
 > node server/server.js
-◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-node:internal/modules/cjs/loader:1520
-    at Module._load (node:internal/modules/cjs/loader:1294:5)
-  throw err;
-    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-Node.js v24.19.0
-  ^
-    at Module.require (node:internal/modules/cjs/loader:1617:12)
-Error: Cannot find module './apps'
-    at require (node:internal/modules/helpers:153:16)
-Require stack:
-    at Object.<anonymous> (/app/server/server.js:9:20)
-- /app/server/server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
-    at Module._compile (node:internal/modules/cjs/loader:1872:14) {
-    at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
-    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
-  code: 'MODULE_NOT_FOUND',
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1122:12)
-  requireStack: [ '/app/server/server.js' ]
-}
 npm warn config production Use `--omit=dev` instead.
-> sennin network@1.0.0 start
-> node server/server.js
-◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
-◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-    at Module._compile (node:internal/modules/cjs/loader:1872:14) {
-    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
-  code: 'MODULE_NOT_FOUND',
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1122:12)
-  requireStack: [ '/app/server/server.js' ]
-node:internal/modules/cjs/loader:1520
-}
-    at Module._load (node:internal/modules/cjs/loader:1294:5)
-  throw err;
-    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-  ^
-    at Module.require (node:internal/modules/cjs/loader:1617:12)
-Node.js v24.19.0
-    at require (node:internal/modules/helpers:153:16)
-Error: Cannot find module './apps'
-    at Object.<anonymous> (/app/server/server.js:9:20)
-Require stack:
-- /app/server/server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
-    at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
-npm warn config production Use `--omit=dev` instead.
-> sennin network@1.0.0 start
-> node server/server.js
-◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
-◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
-}
-Node.js v24.19.0
-node:internal/modules/cjs/loader:1520
-  throw err;
-  ^
-Error: Cannot find module './apps'
-Require stack:
-- /app/server/server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
-    at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
-    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
+
