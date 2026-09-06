@@ -1,4 +1,5 @@
 import express from "express";
+import { randomUUID } from "node:crypto";
 import {
   supabaseAdmin,
   createSessionToken,
@@ -72,11 +73,19 @@ router.post("/auth/register", async (req, res) => {
 
     const normalized = username.toLowerCase();
 
-    const { data: existing } = await supabaseAdmin
+    const { data: existing, error: existingError } = await supabaseAdmin
       .from("users")
       .select("id")
       .eq("username_normalized", normalized)
       .maybeSingle();
+
+    if (existingError) {
+      console.error(existingError);
+
+      return res.status(500).json({
+        error: "アカウントを確認できませんでした。"
+      });
+    }
 
     if (existing) {
       return res.status(409).json({
@@ -85,10 +94,12 @@ router.post("/auth/register", async (req, res) => {
     }
 
     const passwordData = hashPassword(password);
+    const userId = randomUUID();
 
     const { data: user, error } = await supabaseAdmin
       .from("users")
       .insert({
+        id: userId,
         username,
         username_normalized: normalized,
         password_hash: passwordData.hash,
@@ -105,10 +116,21 @@ router.post("/auth/register", async (req, res) => {
       });
     }
 
+    if (user.id !== userId) {
+      await supabaseAdmin
+        .from("users")
+        .delete()
+        .eq("id", userId);
+
+      return res.status(500).json({
+        error: "アカウントIDを確認できませんでした。"
+      });
+    }
+
     const { error: profileError } = await supabaseAdmin
       .from("profiles")
       .insert({
-        id: user.id,
+        id: userId,
         display_name: user.username,
         bio: "",
         website: ""
@@ -118,7 +140,7 @@ router.post("/auth/register", async (req, res) => {
       await supabaseAdmin
         .from("users")
         .delete()
-        .eq("id", user.id);
+        .eq("id", userId);
 
       console.error(profileError);
 
@@ -132,12 +154,22 @@ router.post("/auth/register", async (req, res) => {
     const { error: sessionError } = await supabaseAdmin
       .from("sessions")
       .insert({
-        user_id: user.id,
+        user_id: userId,
         token_hash: hashSessionToken(token),
         expires_at: sessionExpiresAt()
       });
 
     if (sessionError) {
+      await supabaseAdmin
+        .from("profiles")
+        .delete()
+        .eq("id", userId);
+
+      await supabaseAdmin
+        .from("users")
+        .delete()
+        .eq("id", userId);
+
       console.error(sessionError);
 
       return res.status(500).json({
