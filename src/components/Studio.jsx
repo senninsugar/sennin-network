@@ -69,7 +69,7 @@ export default function Studio({
     useState("My first Web OS application.");
 
   const [icon, setIcon] =
-    useState("🧩");
+    useState("");
 
   const [category, setCategory] =
     useState("Utility");
@@ -321,9 +321,7 @@ ${js}
   if (!user) {
     return (
       <div className="empty-state">
-        <div style={{ fontSize: 55 }}>
-          🛠️
-        </div>
+        <div className="empty-icon-placeholder" />
 
         <h2>
           Dev Studio
@@ -347,71 +345,73 @@ ${js}
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit,minmax(220px,1fr))",
-          gap: 12,
-          marginBottom: 20
-        }}
-      >
-        <input
-          className="form-input"
-          placeholder="アプリ名"
-          value={name}
-          onChange={e =>
-            setName(e.target.value)
-          }
-        />
-
-        <input
-          className="form-input"
-          placeholder="アイコン"
-          value={icon}
-          onChange={e =>
-            setIcon(e.target.value)
-          }
-        />
-
-        <input
-          className="form-input"
-          placeholder="バージョン"
-          value={version}
-          onChange={e =>
-            setVersion(e.target.value)
-          }
-        />
-
-        <select
-          className="form-input"
-          value={category}
-          onChange={e =>
-            setCategory(e.target.value)
-          }
+      <div className="metadata-panel">
+        <div className="metadata-title">APP CONFIGURATION</div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit,minmax(220px,1fr))",
+            gap: 12,
+            marginBottom: 12
+          }}
         >
-          <option>Utility</option>
-          <option>Game</option>
-          <option>Education</option>
-          <option>Entertainment</option>
-          <option>Tools</option>
-          <option>Other</option>
-        </select>
-      </div>
+          <input
+            className="form-input"
+            placeholder="アプリ名"
+            value={name}
+            onChange={e =>
+              setName(e.target.value)
+            }
+          />
 
-      <textarea
-        className="form-input"
-        style={{
-          minHeight: 90,
-          marginBottom: 20,
-          resize: "vertical"
-        }}
-        placeholder="アプリの説明"
-        value={description}
-        onChange={e =>
-          setDescription(e.target.value)
-        }
-      />
+          <input
+            className="form-input"
+            placeholder="アイコン (クラス名/パス)"
+            value={icon}
+            onChange={e =>
+              setIcon(e.target.value)
+            }
+          />
+
+          <input
+            className="form-input"
+            placeholder="バージョン"
+            value={version}
+            onChange={e =>
+              setVersion(e.target.value)
+            }
+          />
+
+          <select
+            className="form-input"
+            value={category}
+            onChange={e =>
+              setCategory(e.target.value)
+            }
+          >
+            <option>Utility</option>
+            <option>Game</option>
+            <option>Education</option>
+            <option>Entertainment</option>
+            <option>Tools</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <textarea
+          className="form-input"
+          style={{
+            minHeight: 60,
+            resize: "vertical"
+          }}
+          placeholder="アプリの説明"
+          value={description}
+          onChange={e =>
+            setDescription(e.target.value)
+          }
+        />
+      </div>
 
       {message && (
         <div className="error-box">
@@ -421,60 +421,64 @@ ${js}
 
       <div className="studio">
         <aside className="file-sidebar">
-          <h3>Files</h3>
+          <div className="sidebar-header">
+            <h3>EXPLORER</h3>
+            <div className="sidebar-actions">
+              <button
+                className="icon-button"
+                onClick={addFile}
+                title="New File"
+              >
+                +
+              </button>
+              <button
+                className="icon-button danger-text"
+                onClick={deleteFile}
+                title="Delete Selected File"
+              >
+                -
+              </button>
+            </div>
+          </div>
 
-          {files.map(file => (
-            <button
-              key={file.name}
-              className={
-                "file-item " +
-                (
-                  selectedFile === file.name
-                    ? "active"
-                    : ""
-                )
-              }
-              onClick={() =>
-                setSelectedFile(
-                  file.name
-                )
-              }
-            >
-              {file.name}
-            </button>
-          ))}
+          <div className="file-tree-header">
+            <span className="tree-arrow">v</span> PROJECT FILES
+          </div>
 
-          <button
-            className="secondary-button"
-            style={{
-              width: "100%",
-              marginTop: 10
-            }}
-            onClick={addFile}
-          >
-            + File
-          </button>
-
-          <button
-            className="danger-button"
-            style={{
-              width: "100%",
-              marginTop: 8
-            }}
-            onClick={deleteFile}
-          >
-            Delete
-          </button>
+          <div className="file-list">
+            {files.map(file => (
+              <button
+                key={file.name}
+                className={
+                  "file-item " +
+                  (
+                    selectedFile === file.name
+                      ? "active"
+                      : ""
+                  )
+                }
+                onClick={() =>
+                  setSelectedFile(
+                    file.name
+                  )
+                }
+              >
+                <span className={`file-icon ${file.name.split('.').pop()}`}>
+                  {file.name.endsWith('.html') ? '<>' : file.name.endsWith('.css') ? '#' : '{ }'}
+                </span>
+                <span className="file-name-text">{file.name}</span>
+              </button>
+            ))}
+          </div>
 
           <div className="size-meter">
-            <strong>
-              Size
-            </strong>
-
-            <div>
-              {Math.round(
-                totalSize / 1024
-              )} KB / 500 KB
+            <div className="size-meter-header">
+              <strong>Storage Usage</strong>
+              <span>
+                {Math.round(
+                  totalSize / 1024
+                )} KB / 500 KB
+              </span>
             </div>
 
             <div className="size-meter-bar">
@@ -490,10 +494,27 @@ ${js}
         </aside>
 
         <section className="editor-area">
+          <div className="editor-tabs">
+            {files.map(file => (
+              <div
+                key={file.name}
+                className={
+                  "editor-tab " +
+                  (selectedFile === file.name ? "active" : "")
+                }
+                onClick={() => setSelectedFile(file.name)}
+              >
+                <span>{file.name}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="editor-toolbar">
-            <strong>
-              {selectedFile}
-            </strong>
+            <div className="breadcrumb">
+              <span>src</span>
+              <span className="sep">/</span>
+              <strong>{selectedFile}</strong>
+            </div>
 
             <div
               style={{
@@ -520,18 +541,25 @@ ${js}
             </div>
           </div>
 
-          <textarea
-            className="code-editor"
-            value={
-              currentFile?.content || ""
-            }
-            onChange={e =>
-              updateCurrentFile(
-                e.target.value
-              )
-            }
-            spellCheck={false}
-          />
+          <div className="code-editor-container">
+            <div className="line-numbers">
+              {(currentFile?.content || "").split("\n").map((_, i) => (
+                <div key={i}>{i + 1}</div>
+              ))}
+            </div>
+            <textarea
+              className="code-editor"
+              value={
+                currentFile?.content || ""
+              }
+              onChange={e =>
+                updateCurrentFile(
+                  e.target.value
+                )
+              }
+              spellCheck={false}
+            />
+          </div>
         </section>
       </div>
 
@@ -555,7 +583,7 @@ ${js}
               >
                 <div>
                   <div className="app-icon">
-                    {app.icon}
+                    {app.icon || "APP"}
                   </div>
 
                   <div className="app-name">
