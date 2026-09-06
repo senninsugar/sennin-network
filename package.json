@@ -1,23 +1,27 @@
 {
-  "name": "sennin-network-os",
+  "name": "sennin network",
   "version": "1.0.0",
   "private": true,
-  "description": "Sennin Network Web OS with App Store and DevStudio",
-  "type": "module",
   "scripts": {
-    "dev": "node --watch src/server.js",
-    "start": "node src/server.js",
-    "check": "node --check src/server.js && node --check src/routes/api.js && node --check src/lib/supabase.js"
+    "dev": "concurrently \"vite\" \"node server/server.js\"",
+    "client": "vite",
+    "server": "node server/server.js",
+    "build": "vite build",
+    "start": "node server/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.0",
-    "compression": "^1.8.1",
-    "cookie-parser": "^1.4.7",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "express-rate-limit": "^8.0.1",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.0",
-    "zod": "^4.1.5"
+    "jsonwebtoken": "^9.0.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.1",
+    "vite": "^7.1.3"
   }
 }
