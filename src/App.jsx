@@ -15,6 +15,10 @@ export default function App() {
   const [activeApp, setActiveApp] = useState(null);
   const [booting, setBooting] = useState(true);
 
+  // Window State for Windows OS-like experience
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+
   async function loadAccount() {
     try {
       const result = await getMe();
@@ -48,10 +52,13 @@ export default function App() {
 
   function openApp(app) {
     setActiveApp(app);
+    setIsMinimized(false);
   }
 
   function closeApp() {
     setActiveApp(null);
+    setIsMaximized(false);
+    setIsMinimized(false);
   }
 
   function navigate(nextPage) {
@@ -189,23 +196,54 @@ export default function App() {
           <span>◉</span>
           <small>Account</small>
         </button>
+
+        {activeApp && (
+          <button
+            className={`active-app-taskbar-btn ${!isMinimized ? "running" : ""}`}
+            onClick={() => setIsMinimized(!isMinimized)}
+          >
+            <span>{activeApp.icon || "🧩"}</span>
+            <small>{activeApp.name}</small>
+          </button>
+        )}
       </nav>
 
       {activeApp && (
-        <div className="app-window-layer">
-          <div className="app-window">
+        <div
+          className={`app-window-layer ${isMinimized ? "minimized" : ""}`}
+        >
+          <div
+            className={`app-window ${isMaximized ? "maximized" : ""}`}
+          >
             <div className="app-window-header">
               <div className="app-window-title">
                 <span>{activeApp.icon || "🧩"}</span>
                 <span>{activeApp.name}</span>
               </div>
 
-              <button
-                className="window-close"
-                onClick={closeApp}
-              >
-                ×
-              </button>
+              <div className="window-controls">
+                <button
+                  className="window-control-btn minimize"
+                  onClick={() => setIsMinimized(true)}
+                  title="Minimize"
+                >
+                  &#8722;
+                </button>
+                <button
+                  className="window-control-btn maximize"
+                  onClick={() => setIsMaximized(!isMaximized)}
+                  title={isMaximized ? "Restore" : "Maximize"}
+                >
+                  {isMaximized ? "\u2745" : "\u25A1"}
+                </button>
+                <button
+                  className="window-close"
+                  onClick={closeApp}
+                  title="Close"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             <iframe
