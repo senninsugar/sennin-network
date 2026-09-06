@@ -83,6 +83,7 @@ export async function getUserFromRequest(req) {
     .maybeSingle();
 
   if (userError || !user) {
+    // users テーブルに存在しない孤立セッションをDBから完全消去
     await supabaseAdmin
       .from("sessions")
       .delete()
