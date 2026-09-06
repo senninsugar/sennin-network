@@ -1,9 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const path = require("path");
-
-dotenv.config();
+require("dotenv").config();
 
 const authRouter = require("./auth");
 const appsRouter = require("./apps");
@@ -13,48 +11,63 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: true,
   credentials: true
 }));
 
 app.use(express.json({
-  limit: "2mb"
+  limit: "1mb"
 }));
 
 app.use(express.urlencoded({
   extended: true,
-  limit: "2mb"
+  limit: "1mb"
 }));
 
 app.get("/api/health", (req, res) => {
   res.json({
     ok: true,
-    name: "Web OS API",
-    version: "1.0.0"
+    service: "sennin network"
   });
 });
 
 app.use("/api/auth", authRouter);
 app.use("/api/apps", appsRouter);
 
-if (process.env.NODE_ENV === "production") {
-  const distPath = path.join(__dirname, "..", "dist");
+const distPath = path.join(__dirname, "../dist");
 
-  app.use(express.static(distPath));
+app.use(express.static(distPath));
 
-  app.get("/*splat", (req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
-  });
-}
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/")) {
+    return next();
+  }
+
+  res.sendFile(path.join(distPath, "index.html"));
+});
+
+app.use((req, res) => {
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).json({
+      error: "API endpoint not found"
+    });
+  }
+
+  res.status(404).send("Not Found");
+});
 
 app.use((err, req, res, next) => {
   console.error(err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
 
   res.status(500).json({
     error: "Internal server error"
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Web OS server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Sennin Network server running on port ${PORT}`);
 });
