@@ -83,6 +83,11 @@ export async function getUserFromRequest(req) {
     .maybeSingle();
 
   if (userError || !user) {
+    await supabaseAdmin
+      .from("sessions")
+      .delete()
+      .eq("id", session.id);
+
     return null;
   }
 
