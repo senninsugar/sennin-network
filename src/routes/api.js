@@ -1,5 +1,4 @@
 import express from "express";
-import { randomUUID } from "node:crypto";
 import {
   supabaseAdmin,
   createSessionToken,
@@ -94,12 +93,10 @@ router.post("/auth/register", async (req, res) => {
     }
 
     const passwordData = hashPassword(password);
-    const userId = randomUUID();
 
-    const { data: user, error } = await supabaseAdmin
+    const { data: user, error: userError } = await supabaseAdmin
       .from("users")
       .insert({
-        id: userId,
         username,
         username_normalized: normalized,
         password_hash: passwordData.hash,
@@ -108,30 +105,38 @@ router.post("/auth/register", async (req, res) => {
       .select("id,username,created_at")
       .single();
 
-    if (error || !user) {
-      console.error(error);
+    if (userError || !user) {
+      console.error(userError);
 
       return res.status(500).json({
         error: "アカウントを作成できませんでした。"
       });
     }
 
-    if (user.id !== userId) {
+    const { data: registeredUser, error: registeredUserError } = await supabaseAdmin
+      .from("users")
+      .select("id,username,created_at")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (registeredUserError || !registeredUser) {
+      console.error(registeredUserError);
+
       await supabaseAdmin
         .from("users")
         .delete()
-        .eq("id", userId);
+        .eq("id", user.id);
 
       return res.status(500).json({
-        error: "アカウントIDを確認できませんでした。"
+        error: "作成したアカウントを確認できませんでした。"
       });
     }
 
     const { error: profileError } = await supabaseAdmin
       .from("profiles")
       .insert({
-        id: userId,
-        display_name: user.username,
+        id: registeredUser.id,
+        display_name: registeredUser.username,
         bio: "",
         website: ""
       });
@@ -140,7 +145,7 @@ router.post("/auth/register", async (req, res) => {
       await supabaseAdmin
         .from("users")
         .delete()
-        .eq("id", userId);
+        .eq("id", registeredUser.id);
 
       console.error(profileError);
 
@@ -154,7 +159,7 @@ router.post("/auth/register", async (req, res) => {
     const { error: sessionError } = await supabaseAdmin
       .from("sessions")
       .insert({
-        user_id: userId,
+        user_id: registeredUser.id,
         token_hash: hashSessionToken(token),
         expires_at: sessionExpiresAt()
       });
@@ -163,12 +168,12 @@ router.post("/auth/register", async (req, res) => {
       await supabaseAdmin
         .from("profiles")
         .delete()
-        .eq("id", userId);
+        .eq("id", registeredUser.id);
 
       await supabaseAdmin
         .from("users")
         .delete()
-        .eq("id", userId);
+        .eq("id", registeredUser.id);
 
       console.error(sessionError);
 
@@ -180,7 +185,7 @@ router.post("/auth/register", async (req, res) => {
     setSessionCookie(res, token);
 
     res.status(201).json({
-      user
+      user: registeredUser
     });
   } catch (error) {
     console.error(error);
